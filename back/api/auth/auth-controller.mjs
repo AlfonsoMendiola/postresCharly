@@ -8,7 +8,7 @@ export const authController = {
     login: async(req, res) => {
         try {
             const {email, pass} = req.body;
-            const usuario = await User.findOne( { where:{email} } ).exec();
+            const usuario = await User.findOne( {email} ).exec();
             if (!usuario) return res.status(404).json({error: 'Registrate para iniciar sesion'});
 
             const validPass = bcrypt.compareSync(pass, usuario.pass);
@@ -16,10 +16,10 @@ export const authController = {
 
             const token = await generarJWT(usuario.id);
 
-            res.json({usuario, token});
+            res.json({token, usuario});
         } catch (error) {
             console.log(error);
-            return res.status(500).json({error: `${error}`});
+            return res.status(500).json({error});
         }
     },
 

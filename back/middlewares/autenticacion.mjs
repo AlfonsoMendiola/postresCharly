@@ -7,8 +7,8 @@ const verificarAuth = async(req, res, next) =>{
         if (!req.header('authorization')) return res.status(401).json({error: 'Bearer Token obligatorio'});
         const token = req.header('authorization').split(' ')[1];
         const usuarioToken = jwt.verify(token, process.env.SECRETO_PRIVATEKEY);
-    
-        const usuario = await User.findByPk(usuarioToken._id);
+        
+        const usuario = await User.findById(usuarioToken.id);
         if(!usuario) return res.status(401).json({error: 'El usuario no existe'});
         req.usuarioToken = usuario;
     

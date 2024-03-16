@@ -1,17 +1,17 @@
+import { subirArchivo } from "../../helpers/subir-archivo.mjs";
 import { Producto } from "./producto-model.mjs";
 
 export const productoController = {
     post: async(req, res) => {
         try {
-            const body = req.body;
-        
-            if(req.file){
-                body.image = req.file.filename
-                console.log(req.file);
-            }else{
-                body.image = "Sin imagen"
+            
+            if(req.files){
+                const imagen = await subirArchivo(req.files.image);
+                req.body.image = `${process.env.DOMAIN}api/multimedia/${imagen}`;
             }
-            const data = await Producto.create(body);
+            const data = new Producto(req.body);
+
+            await data.save();
             res.json(data);
             
         } catch (error) {
@@ -22,8 +22,9 @@ export const productoController = {
 
     get: async(req, res) => {
         try {
-            
             const data = await Producto.findById(req.params.id).exec();
+            if(!data) return res.status(404).json({error: 'no existe'});
+
             res.json(data);
         } catch (error) {
             console.log(error);
@@ -34,14 +35,14 @@ export const productoController = {
     gets: async(req, res) => {
         try {
             const limite = Number(req.query.limite) || 50;
-            const pagina = Number(req.query.skip) || 1;
+            const pagina = Number(req.query.pagina) || 1;
             
             const [total, data] = await Promise.all([
-                User.find().countDocuments().exec(),
-                User.find().limit(limite).skip( (pagina -1)*limite ).exec()
+                Producto.find().countDocuments().exec(),
+                Producto.find().limit(limite).skip( (pagina -1)*limite ).exec()
             ]);
 
-            res.json({total, pages: Math.ceil( total / limite ) , data});
+            res.json({total, pages: Math.ceil( total / limite ), data});
             
         } catch (error) {
             console.log(error);
@@ -51,15 +52,12 @@ export const productoController = {
 
     update: async(req, res) => {
         try {
-            const _id = req.params.id;
-            const body = req.body;
-
-            if(req.file){
-                body.image = req.file.filename
-                console.log(req.file);
+            if(req.files){
+                const imagen = await subirArchivo(req.files.image);
+                req.body.image = `${process.env.DOMAIN}api/multimedia/${imagen}`;
             }
 
-            const data = await Producto.findByIdAndUpdate(_id, body, {new: true, runValidators: true}).exec();
+            const data = await Producto.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true}).exec();
             res.json(data);
             
         } catch (error) {
@@ -71,6 +69,7 @@ export const productoController = {
     delete: async(req, res) => {
         try {
             const data = await Producto.findByIdAndDelete(req.params.id).exec();
+            if(!data) return res.status(404).json({error: 'no existe'});
             res.json(data);
         } catch (error) {
             console.log(error);

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const categorias = {
@@ -15,6 +15,7 @@ const productoSchema = new Schema({
     precioUnitario: {type: Number, required: [true, 'Precio obligatorio']},
     image: {type: String, default: 'no_image'},
     categoria: {type: String, default: 'OTROS', enum: categorias},
+    vendidos: {type: Number, default: 0},
 });
 
 export const Producto = mongoose.model('Producto', productoSchema);

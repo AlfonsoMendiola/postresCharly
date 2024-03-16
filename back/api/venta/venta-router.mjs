@@ -3,10 +3,9 @@ import { ventaController } from './venta-controller.mjs';
 
 import { verificarAuth, verificarAdministrador } from '../../middlewares/autenticacion.mjs';
 
-
 const ventaRouter = Router();
 
-ventaRouter.post('/nuevo',[
+ventaRouter.post('/',[
     verificarAuth
 ], ventaController.post);
 

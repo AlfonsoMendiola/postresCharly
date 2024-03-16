@@ -20,6 +20,8 @@ export const usuarioController = {
     get: async(req, res) => {
         try {
             const data = await User.findById(req.params.id).exec();
+            if(!data) return res.status(404).json({error: 'no existe'});
+
             res.json(data);
         } catch (error) {
             console.log(error);
@@ -30,7 +32,7 @@ export const usuarioController = {
     gets: async(req, res) => {
         try {
             const limite = Number(req.query.limite) || 50;
-            const pagina = Number(req.query.skip) || 1;
+            const pagina = Number(req.query.pagina) || 1;
             
             const [total, data] = await Promise.all([
                 User.find().countDocuments().exec(),
@@ -48,9 +50,9 @@ export const usuarioController = {
         try {
 
             if(req.body.pass){
-                body.pass = bcrypt.hashSync(req.body.pass, bcrypt.genSaltSync());
+                req.body.pass = bcrypt.hashSync(req.body.pass, bcrypt.genSaltSync());
             }
-            const data = await User.findByIdAndUpdate(req.params.id, body, {new: true, runValidators: true});
+            const data = await User.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true});
             res.json(data);
         } catch (error) {
             console.log(error);
@@ -61,6 +63,8 @@ export const usuarioController = {
     delete: async(req, res) => {
         try {
             const data = await User.findByIdAndDelete(req.params.id);
+            if(!data) return res.status(404).json({error: 'no existe'});
+            
             res.json(data);
         } catch (error) {
             console.log(error);

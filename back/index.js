@@ -7,6 +7,9 @@ import fileupload from 'express-fileupload';
 import { noEncontradoRouter } from './api/no-encontrado/noEncontrado-router.mjs';
 import { authRouter } from './api/auth/auth-router.mjs';
 import { usuarioRouter } from './api/usuario/user-router.mjs';
+import { productoRouter } from './api/producto/producto-router.mjs';
+import { multimediaRouter } from './api/multimedia/multimedia-router.mjs';
+import { ventaRouter } from './api/venta/venta-router.mjs';
 
 
 class Servidor{
@@ -34,6 +37,9 @@ class Servidor{
     routes(){
         this.app.use('/api/auth', authRouter);
         this.app.use('/api/usuarios', usuarioRouter);
+        this.app.use('/api/productos', productoRouter);
+        this.app.use('/api/multimedia', multimediaRouter);
+        this.app.use('/api/ventas', ventaRouter);
         
         this.app.use('/', noEncontradoRouter);
     }
