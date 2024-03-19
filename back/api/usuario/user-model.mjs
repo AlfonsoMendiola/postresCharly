@@ -5,8 +5,8 @@ const roles = {
     values: ['ADMIN', 'USER'],
     message: '{VALUE} Rol no valido'
 }
-const vistas ={
-    values: ['total', 'empleados', 'adminInventario', 'adminUsuarios', 'tienda', 'principal'],
+const vistas = {
+    values: ['menu', 'ventas', 'productos', 'usuarios'],
     message: '{VALUE} Vista no valida'
 }
 
@@ -16,7 +16,7 @@ const userSchema = new Schema({
     pass: {type: String, required:[true, 'La contraseña es necesaria']},
     date: {type: Date, default: Date.now},
     role: {type: String, default:'USER', enum: roles},
-    vista:{type: String, default:'principal', enum: vistas},
+    vistas: [{type: String, default:'menu', enum: vistas}],
     activo: {type: Boolean, default: true}
 });
 

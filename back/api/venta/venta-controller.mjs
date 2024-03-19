@@ -16,6 +16,7 @@ export const ventaController = {
                 if(productoDB.existencia < producto.cantidad) throw new Error(`no hay suficiente producto`);
 
                 productoDB.existencia -= producto.cantidad;
+                productoDB.vendido += producto.cantidad;
                 await productoDB.save();
             });
             
@@ -31,9 +32,8 @@ export const ventaController = {
 
     get: async(req, res) => {
         try {
-            const data = await Venta.findById(req.params.id).exec();
+            const data = await Venta.findById(req.params.id).populate('orden.id_producto', 'nombre').exec();
             res.json(data);
-            
         } catch (error) {
             console.log(error);
             return res.status(500).json(error);
