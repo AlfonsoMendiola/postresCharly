@@ -1,8 +1,8 @@
 <script setup>
 
 import { ref } from 'vue'
-import router from '@/router';
-import { useUsuarioStore } from '@/stores/user';
+import router from '@/router'
+import { useUsuarioStore } from '@/stores/user'
 import axios from 'axios'
 
 const usuarioState = useUsuarioStore()
