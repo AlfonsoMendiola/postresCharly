@@ -9,7 +9,10 @@ export const productoController = {
                 const imagen = await subirArchivo(req.files.image);
                 req.body.image = `${process.env.DOMAIN}api/multimedia/${imagen}`;
             }
-            const data = new Producto(req.body);
+            const data = new Producto({
+                ...req.body,
+                utilidad: req.body.precioUnitario - req.body.costoUnitario
+            });
 
             await data.save();
             res.json(data);

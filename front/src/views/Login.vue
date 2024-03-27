@@ -8,7 +8,10 @@ import axios from 'axios'
 const usuarioState = useUsuarioStore()
 
 const apiUrl = import.meta.env.VITE_API_URL
-const userInfo = ref({})
+const userInfo = ref({
+    email: 'al1@localhost.com',
+    pass: '123456'
+})
 const msg = ref('')
 
 const login = async() =>{
@@ -30,7 +33,7 @@ const login = async() =>{
 
 <template>
 
-<h1>login</h1>
+<h2>Login</h2>
 
 <form @submit.prevent="login">
     <div class="mb-3">

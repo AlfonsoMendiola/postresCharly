@@ -13,6 +13,7 @@ const productoSchema = new Schema({
     existencia: {type: Number, default: 0},
     costoUnitario: {type: Number, required: [true, 'Costo obligatorio']},
     precioUnitario: {type: Number, required: [true, 'Precio obligatorio']},
+    utilidad: {type: Number, required:[true, 'calcular utilidad']},
     image: {type: String, default: 'no_image'},
     categoria: {type: String, default: 'OTROS', enum: categorias},
     vendido: {type: Number, default: 0},

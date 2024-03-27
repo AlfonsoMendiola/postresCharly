@@ -7,13 +7,15 @@ import axios from 'axios'
 const usuarioState = useUsuarioStore()
 
 const apiUrl = import.meta.env.VITE_API_URL
-const productoInfo = ref({})
+let productoInfo = ref({})
 let productoImage = ref([])
 let msg = ref('')
 
 const handleFileUpload = (e) => {
     productoImage = e.target.files[0]
 }
+
+//refactor del post para hacerlo compatible con pinia
 
 const productoPost = async() =>{
     const formData = new FormData();
@@ -22,20 +24,24 @@ const productoPost = async() =>{
         formData.append(key, productoInfo.value[key])
     })
     formData.append("image", productoImage);
-    try {
+    // try {
         
-        const response = await axios.post(`${apiUrl}productos`, formData, {
-            headers: {
-                'Authorization': `Bearer ${usuarioState.getToken}`,
-                'Content-Type': 'multipart/form-data'
-            }
-        })
+    //     const response = await axios.post(`${apiUrl}productos`, formData, {
+    //         headers: {
+    //             'Authorization': `Bearer ${usuarioState.getToken}`,
+    //             'Content-Type': 'multipart/form-data'
+    //         }
+    //     })
 
-        if (response.status == 200) msg.value = "Guardado correctamente";
-    } catch (error) {
-        console.log(error)
-        msg.value = error.response.data.error
-    }
+    //     if (response.status == 200) {
+    //         msg.value = "Guardado correctamente"
+    //         productoInfo.value = {}
+    //         productoImage.value = []
+    //     }
+    // } catch (error) {
+    //     console.log(error)
+    //     msg.value = error.response.data.error
+    // }
 }
 
 watch(msg, () => {
